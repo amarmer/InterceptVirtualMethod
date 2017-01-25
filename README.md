@@ -39,7 +39,7 @@ static int STDMETHODCALLTYPE fooIntercept(ITest* pTest, const string& str)
     return s_fTest_foo(pTest, str);
 }
 
-int _tmain(int argc, _TCHAR* argv[])
+void main()
 {
     ITest* pTest = new Test;
 
@@ -52,7 +52,6 @@ int _tmain(int argc, _TCHAR* argv[])
     printf("res %d\n", res);
 
     delete pTest;
-
-	return 0;
 }
+
 ```
