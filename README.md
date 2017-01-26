@@ -4,7 +4,7 @@ InterceptVirtualMethod is a small framework which allows to intercept virtual me
 
 It is used in Windows mostly for COM interfaces methods interception. 
 
-Bellow is example how it can be used.
+Bellow is an example how it can be used.
 
 ```C++
 #include <tchar.h>
