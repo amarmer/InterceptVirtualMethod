@@ -12,7 +12,8 @@ struct VTable<0> {
   virtual int GetIndex(VTable*) { return 0; }
 };
 
-typedef VTable<50> MaxVTable;
+// Assume that there is no more than 50 virtual functions in a class.
+using MaxVTable = VTable<50>;
 
 template <typename T> 
 int GetVTableSize() {
