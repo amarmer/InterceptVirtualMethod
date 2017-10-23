@@ -14,7 +14,7 @@ Bellow is an example how it can be used.
 
 using namespace std;
 
-// 'ITest' interface is known.
+// 'ITest' interface is available.
 struct ITest {
   virtual int foo(const string& str1, string& str2) = 0;
 };
@@ -45,7 +45,7 @@ static int fooIntercept(ITest* pTest, const string& str1, string& str2) {
 void main() {
   ITest* pTest = new Test;
 
-  // 'SetVTableFunction' overrides 'foo' function in struct 'Test' with 'fooIntercept' function.
+  // 'SetVTableFunction' overrides 'Test::foo' with 'fooIntercept' function.
   // 's_fTest_foo' can be used to call 'Test::foo'.
   s_fTest_foo = SetVTableFunction(pTest, &ITest::foo, fooIntercept);
 
