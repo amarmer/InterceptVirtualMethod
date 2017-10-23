@@ -20,9 +20,10 @@ struct ITest {
 
 struct Test: public ITest {
   int foo(const string& str1, string& str2) override {
-    cout << "Test::foo 'str1 + str2': " << str1 + str2 << endl;
+    auto str = str1 + str2;
+    cout << "Test::foo 'str1 + str2': " << str << endl;
 
-    return (int)(str1 + str2).size();
+    return (int)str.size();
   }
 };
 
