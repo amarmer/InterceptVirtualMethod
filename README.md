@@ -28,8 +28,8 @@ struct Test: public ITest {
 
 static VTABLE_FUNCTION_TYPE(&ITest::foo) s_fTest_foo;
 
-static int fooIntercept(ITest* pTest, const string& str1, string& str2) {
-  cout << "fooIntercept" << endl;
+static int fooOverride(ITest* pTest, const string& str1, string& str2) {
+  cout << "fooOverride" << endl;
 
   // Calls Test::foo
   auto ret = s_fTest_foo(pTest, str1, str2);
@@ -42,9 +42,9 @@ static int fooIntercept(ITest* pTest, const string& str1, string& str2) {
 void main() {
   ITest* pTest = new Test;
 
-  s_fTest_foo = OverrideVTableFunction(pTest, &ITest::foo, fooIntercept);
+  s_fTest_foo = OverrideVTableFunction(pTest, &ITest::foo, fooOverride);
 
-  // Calls fooIntercept
+  // 'pTest->foo' calls 'fooOverride'.
   string s = "QAZ";
   auto res = pTest->foo("ABC", s);
 
