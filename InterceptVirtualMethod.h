@@ -32,7 +32,7 @@ int GetVTableIndex(TRet(T::*f)(Args...)) {
 }
 
 template <typename T, typename TF, typename TRet, typename... Args>
-TRet (STDMETHODCALLTYPE *SetVTableFunction(T* pT, TRet(TF::*fOrig)(Args...), TRet(*fNew)(T*, Args...)))(T*, Args...) {
+TRet (STDMETHODCALLTYPE *OverrideVTableFunction(T* pT, TRet(TF::*fOrig)(Args...), TRet(*fNew)(T*, Args...)))(T*, Args...) {
   // Check that T is derived from TF
   TF* p = pT;
 
@@ -76,4 +76,3 @@ template <typename T, typename TRet, typename... Args>
 TRet(*VTableFunctionType(TRet(T::*fOrig)(Args...)))(T*, Args...);
 
 #define VTABLE_FUNCTION_TYPE(F) decltype(VTableFunctionType(F))
-
