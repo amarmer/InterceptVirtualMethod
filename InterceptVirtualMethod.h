@@ -76,3 +76,4 @@ template <typename T, typename TRet, typename... Args>
 TRet(*VTableFunctionType(TRet(T::*fOrig)(Args...)))(T*, Args...);
 
 #define VTABLE_FUNCTION_TYPE(F) decltype(VTableFunctionType(F))
+
