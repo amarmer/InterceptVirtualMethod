@@ -30,7 +30,7 @@ struct Test: public ITest {
 
 static VTABLE_FUNCTION_TYPE(&ITest::foo) s_fTest_foo;
 
-// This function overrides 'foo' function in struct 'Test'.
+// This function overrides 'Test::foo'.
 static int fooIntercept(ITest* pTest, const string& str1, string& str2) {
   cout << "fooIntercept" << endl;
 
