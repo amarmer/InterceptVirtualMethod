@@ -9,49 +9,48 @@ Bellow is an example how it can be used.
 ```C++
 #include <tchar.h>
 #include <string>
+#include <iostream>
 #include "InterceptVirtualMethod.h"
 
 using namespace std;
 
-struct ITest
-{
-    virtual int STDMETHODCALLTYPE foo(const string& str) = 0;
+struct ITest {
+  virtual int foo(const string& str1, string& str2) = 0;
 };
 
-struct Test: public ITest
-{
-    int STDMETHODCALLTYPE foo(const string& str) override
-    {
-        printf("Test::foo str: %s%\n", str.c_str());
+struct Test: public ITest {
+  int foo(const string& str1, string& str2) override {
+    cout << "Test::foo 'str1 + str2': " << str1 + str2 << endl;
 
-        return str.size();
-    }
+    return (int)(str1 + str2).size();
+  }
 };
 
+static VTABLE_FUNCTION_TYPE(&ITest::foo) s_fTest_foo;
 
-static VTABLE_FUNCTION_TYPE(ITest, foo) s_fTest_foo;
+static int fooIntercept(ITest* pTest, const string& str1, string& str2) {
+  cout << "fooIntercept" << endl;
 
-static int STDMETHODCALLTYPE fooIntercept(ITest* pTest, const string& str)
-{
-    printf("fooIntercept\n");
+  // Calls Test::foo
+  auto ret = s_fTest_foo(pTest, str1, str2);
 
-    // Calls Test::foo
-    return s_fTest_foo(pTest, str);
+  str2 = "QWERTY";
+
+  return ret;
 }
 
-void main()
-{
-    ITest* pTest = new Test;
+void main() {
+  ITest* pTest = new Test;
 
-    // s_fQAZ_Test == pointer to QAZ::Test 
-    s_fTest_foo = SetVTableFunction(pTest, &ITest::foo, fooIntercept);
+  s_fTest_foo = SetVTableFunction(pTest, &ITest::foo, fooIntercept);
 
-    // Calls fooIntercept
-    auto res = pTest->foo("ABC");
+  // Calls fooIntercept
+  string s = "QAZ";
+  auto res = pTest->foo("ABC", s);
 
-    printf("res %d\n", res);
+  cout << "s: " << s << " res: " << res << endl;
 
-    delete pTest;
+  delete pTest;
 }
 
 ```
