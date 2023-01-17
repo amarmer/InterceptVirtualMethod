@@ -18,7 +18,7 @@ struct ITest {
   virtual int foo(const string& str1, string& str2) = 0;
 };
 
-struct Test: public ITest {
+struct Test : public ITest {
   int foo(const string& str1, string& str2) override {
     auto str = str1 + str2;
     cout << "Test::foo 'str1 + str2': " << str << endl;
@@ -29,21 +29,23 @@ struct Test: public ITest {
 
 static VTABLE_FUNCTION_TYPE(&ITest::foo) s_fTest_foo;
 
-static int fooOverride(ITest* pTest, const string& str1, string& str2) {
-  cout << "fooOverride" << endl;
-
-  // Calls Test::foo
-  auto ret = s_fTest_foo(pTest, str1, str2);
-
-  str2 = "QWERTY";
-
-  return ret;
-}
-
-void main() {
+int main() {
   ITest* pTest = new Test;
 
-  s_fTest_foo = OverrideVTableFunction(pTest, &ITest::foo, fooOverride);
+  s_fTest_foo = OverrideVTableFunction(
+    pTest, 
+    &ITest::foo, 
+    +[](ITest* pTest, const string& str1, string& str2)
+    {
+      cout << "fooOverride" << endl;
+
+      // Calls Test::foo
+      auto ret = s_fTest_foo(pTest, str1, str2);
+
+      str2 = "QWERTY";
+
+      return ret;
+    });
 
   // 'pTest->foo' calls 'fooOverride'.
   string s = "QAZ";
@@ -52,6 +54,8 @@ void main() {
   cout << "s: " << s << " res: " << res << endl;
 
   delete pTest;
+
+  return 0;
 }
 
 ```
